@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     SwitchCompat mDarkModeManualSwitch;
 
     static Intent sMainIntent;
-    static NotificationCollectorMonitorService mNCMS;
+    static NotificationCollectorMonitorService sNCMS;
 
     public HUDInterface mHud = new DummyHUD();
     public boolean mIsNavigating = false;
@@ -1033,9 +1033,9 @@ public class MainActivity extends AppCompatActivity {
             if (has_arrow_bitmap) {
                 if (null != mArrowDebugSwitch && mArrowDebugSwitch.isChecked()) {
                     Parcelable p = intent.getParcelableExtra(getString(R.string.arrow_bitmap));
-                    if (null != mNCMS && p instanceof android.graphics.Bitmap) {
+                    if (null != sNCMS && p instanceof android.graphics.Bitmap) {
                         String notify_msg = intent.getStringExtra(getString(R.string.gmaps_notify_msg));
-                        mNCMS.startNotification(notify_msg, (android.graphics.Bitmap) p);
+                        sNCMS.startNotification(notify_msg, (android.graphics.Bitmap) p);
                     }
                 }
                 return;
