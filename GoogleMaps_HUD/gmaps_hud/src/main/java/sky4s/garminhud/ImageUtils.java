@@ -17,8 +17,7 @@ public class ImageUtils {
     public static int getGreenAlpha(int pixel) {
         final int alpha = (pixel >> 24) & 0xff;
         final int green = ((pixel >> 8) & 0xff);
-        final int green_alpha = (green * alpha) >> 8;
-        return green_alpha;
+        return (green * alpha) >> 8;
     }
 
 
@@ -50,7 +49,7 @@ public class ImageUtils {
         if (null == drawable) {
             return null;
         }
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
@@ -77,13 +76,13 @@ public class ImageUtils {
         return storeBitmap(image, null, filename);
     }
 
-
     public static boolean storeBitmapQ(Bitmap bmp, String filename) {
         File cacheFile = new File(context.getCacheDir(), filename);
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(cacheFile);
-            final boolean compress_result = bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // bmp is your Bitmap instance
+            final boolean compress_result = bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             // PNG is a lossless format, the compression factor (100) is ignored
             return true;
         } catch (FileNotFoundException e) {
@@ -129,7 +128,6 @@ public class ImageUtils {
         }
     }
 
-
     public static Bitmap getScaleBitmap(Bitmap bitmap, int newWidth,
                                         int newHeight) {
         int w = bitmap.getWidth();
@@ -139,26 +137,25 @@ public class ImageUtils {
         float scaleH = (float) newHeight / h;
         // scale = scale < scale2 ? scale : scale2;
         matrix.postScale(scaleW, scaleH);
-        Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
 //        if (bitmap != null && !bitmap.equals(bmp) && !bitmap.isRecycled()) {
 //            bitmap.recycle();
 //            bitmap = null;
 //        }
-        return bmp;// Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
-
+//        return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+        return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
     }
 
     /**
      * <p>This method combines two images into one by rendering them side by side.</p>
      *
-     * @param left The image that goes on the left side of the combined image.
+     * @param left  The image that goes on the left side of the combined image.
      * @param right The image that goes on the right side of the combined image.
      * @return The combined image.
      */
-    public static  Bitmap combineBitmaps(final Bitmap left, final Bitmap right){
+    public static Bitmap combineBitmaps(final Bitmap left, final Bitmap right) {
         // Get the size of the images combined side by side.
         int width = left.getWidth() + right.getWidth();
-        int height = left.getHeight() > right.getHeight() ? left.getHeight() : right.getHeight();
+        int height = Math.max(left.getHeight(), right.getHeight());
 
         // Create a Bitmap large enough to hold both input images and a canvas to draw to this
         // combined bitmap.
