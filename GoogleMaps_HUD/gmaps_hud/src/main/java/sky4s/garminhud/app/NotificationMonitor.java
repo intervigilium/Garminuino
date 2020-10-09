@@ -25,8 +25,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import androidx.annotation.RequiresApi;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -38,6 +36,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.RequiresApi;
 import sky4s.garminhud.Arrow;
 import sky4s.garminhud.ArrowImage;
 import sky4s.garminhud.ArrowV2;
@@ -63,7 +62,7 @@ public class NotificationMonitor extends NotificationListenerService {
     private static final String TAG = NotificationMonitor.class.getSimpleName();
     private static final int EVENT_UPDATE_CURRENT_NOS = 0;
 
-    public static List<StatusBarNotification[]> sCurrentNotifications = new ArrayList<StatusBarNotification[]>();
+    public static List<StatusBarNotification[]> sCurrentNotifications = new ArrayList<>();
     public static int sCurrentNotificationsCounts = 0;
     public static StatusBarNotification sPostedNotification;
     public static StatusBarNotification sRemovedNotification;
@@ -633,8 +632,6 @@ public class NotificationMonitor extends NotificationListenerService {
             String subText = parseString(subTextObj);
             subText = null == subText ? text : subText;
 
-            String textOnGmapsNotify = title;//subText + " " + title + " " + text;
-
             // Check if subText is empty (" ·  · ") --> don't parse subText
             // Occurs for example on NavigationChanged
             boolean subTextEmpty = true;
@@ -686,7 +683,7 @@ public class NotificationMonitor extends NotificationListenerService {
 
 //                            Bitmap combinedBitmap = ImageUtils.combineBitmaps(bitmapImage, foundArrowBitmap);
                             mPostman.addParcelableExtra(getString(R.string.arrow_bitmap), foundArrowBitmap);
-                            mPostman.addStringExtra(getString(R.string.gmaps_notify_msg), textOnGmapsNotify);
+                            mPostman.addStringExtra(getString(R.string.gmaps_notify_msg), title);
                             mPostman.sendIntent2MainActivity();
 
                             mLastFoundArrowV2 = mFoundArrowV2;
@@ -851,7 +848,7 @@ public class NotificationMonitor extends NotificationListenerService {
 
         sArrowMinSad = Integer.MAX_VALUE;
         int minSADIndex = -1;
-        int sadArray[]=new int [mArrowBitmaps.length ];
+        int sadArray[] = new int[mArrowBitmaps.length];
 
         for (int x = 0; x < length; x++) {
 //            int sad = getNotWhiteSAD(scaleImage, mArrowBitmaps[x]);
