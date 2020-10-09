@@ -2,10 +2,8 @@ package sky4s.garminhud.app;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -374,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
         SCREENCAP_STORE_DIRECTORY = sdcardCachePath + "/screenshots/";
         File screenshotDir = new File(SCREENCAP_STORE_DIRECTORY);
         if (!screenshotDir.exists()) {
-            final boolean mk_result = screenshotDir.mkdir();
+            final boolean mkDirResult = screenshotDir.mkdir();
         }
 
         mNotificationManager = getSystemService(NotificationManager.class);
@@ -527,7 +525,7 @@ public class MainActivity extends AppCompatActivity {
 //                startService(new Intent(this, NotificationCollectorMonitorService.class));
             }
 
-//                // create virtual display depending on device width / height
+            // create virtual display depending on device width / height
             createVirtualDisplay();
 //
 //                // register orientation change callback
@@ -1125,7 +1123,6 @@ public class MainActivity extends AppCompatActivity {
                     sendBooleanExtraByBroadcast(getString(R.string.broadcast_receiver_notification_monitor),
                             getString(R.string.option_arrow_type), arrowTypeV2_in_ui);
                 }
-
             }
         }
     }
@@ -1256,8 +1253,9 @@ public class MainActivity extends AppCompatActivity {
 
         // start capture reader
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mProjectionHandler);
+        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight,
+                mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null,
+                mProjectionHandler);
         mImageReader.setOnImageAvailableListener(mImageDetectListener, mProjectionHandler);
     }
 }
-
