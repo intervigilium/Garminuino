@@ -295,6 +295,24 @@ public class BMWHUD extends HUDAdapter {
                     Log.e(TAG, "SetDirection: Unhandled right roundabout direction: " + nRoundaboutOut);
                     break;
             }
+        } else if (nType == eOutType.RightFlag && nRoundaboutOut == eOutAngle.AsDirection) {
+            // arrivals have nType as RightFlag for some reason
+            switch (nDir) {
+                case Straight:
+                    mMsg.setArrow(BMWMessage.ARROW_180);
+                    break;
+                case Left:
+                    mMsg.setArrow(BMWMessage.ARROW_FORK_LEFT);
+                    break;
+                case Right:
+                    mMsg.setArrow(BMWMessage.ARROW_FORK_RIGHT);
+                    break;
+                default:
+                    mMsg.setArrow(BMWMessage.ARROW_180);
+                    Log.w(TAG, "SetDirection: Unknown arrivals direction: " +
+                            nDir + ", fallback to ARROW_180");
+                    break;
+            }
         } else {
             // treat Lane, LongerLane, RightFlag the same
             switch (nDir) {
