@@ -16,9 +16,9 @@ import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
-
 import java.util.List;
+
+import androidx.core.app.NotificationCompat;
 
 /**
  * Created by xinghui on 9/20/16.
@@ -54,14 +54,18 @@ public class NotificationCollectorMonitorService extends Service {
         stopForeground(true);
     }
 
-    private Notification notification;
-    private NotificationManager mNotificationManager;
+    private Notification mNotification;
 
     private Notification getNormalNotification(String contentText, Bitmap icon) {
         final Intent mainIntent = MainActivity.sMainIntent;
         MainActivity.mNCMS = this;
-        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // ONE_SHOT：PendingIntent只使用一次；CANCEL_CURRENT：PendingIntent執行前會先結束掉之前的；NO_CREATE：沿用先前的PendingIntent，不建立新的PendingIntent；UPDATE_CURRENT：更新先前PendingIntent所帶的額外資料，並繼續沿用
-        final PendingIntent pendingMainIntent = PendingIntent.getActivity(getApplicationContext(), 0, mainIntent, flags); // 取得PendingIntent
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        // ONE_SHOT：PendingIntent只使用一次；
+        // CANCEL_CURRENT：PendingIntent執行前會先結束掉之前的；
+        // NO_CREATE：沿用先前的PendingIntent，不建立新的PendingIntent；
+        // UPDATE_CURRENT：更新先前PendingIntent所帶的額外資料，並繼續沿用
+        final PendingIntent pendingMainIntent = PendingIntent.getActivity(getApplicationContext(),
+                0, mainIntent, flags); // 取得PendingIntent
 
 
         final String channelID = "id";
@@ -100,16 +104,16 @@ public class NotificationCollectorMonitorService extends Service {
         if (null != icon) {
             builder.setLargeIcon(icon);
         }
-        notification = builder.build();
-        return notification;
+        mNotification = builder.build();
+        return mNotification;
     }
 
 
     void startNotification(String contentText, Bitmap icon) {
 //        log("startNotification");
         //Step1. 初始化NotificationManager，取得Notification服務
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notification = getNormalNotification(null == contentText ? "GMaps Notify Monitor Service" : contentText, icon);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotification = getNormalNotification(null == contentText ? "GMaps Notify Monitor Service" : contentText, icon);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final String channelID = "id";
@@ -122,14 +126,14 @@ public class NotificationCollectorMonitorService extends Service {
             channel.setVibrationPattern(new long[]{0});
             channel.enableVibration(true);
 
-            mNotificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(channel);
         } else {
-            notification.vibrate = new long[]{0};
+            mNotification.vibrate = new long[]{0};
         }
 
         // 把指定ID的通知持久的發送到狀態條上.
-//        mNotificationManager.notify(R.integer.notify_id, notification);
-        startForeground(1, notification);
+//        notificationManager.notify(R.integer.notify_id, notification);
+        startForeground(1, mNotification);
     }
 
     private void stopNotification() {
@@ -180,10 +184,8 @@ public class NotificationCollectorMonitorService extends Service {
 
     }
 
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 }
-
