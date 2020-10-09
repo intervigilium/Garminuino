@@ -65,10 +65,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 import chutka.bitman.com.speedometersimplified.LocationService;
 import sky4s.garminhud.Arrow;
-import sky4s.garminhud.ImageUtils;
 import sky4s.garminhud.app.detect.ImageDetectListener;
 import sky4s.garminhud.eOutAngle;
 import sky4s.garminhud.eUnits;
@@ -382,7 +380,6 @@ public class MainActivity extends AppCompatActivity {
         mNotificationManager = getSystemService(NotificationManager.class);
         mProjectionManager = getSystemService(MediaProjectionManager.class);
         OCR_STORE_DIRECTORY = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
-        ImageUtils.context = this;
 
         mSharedPrefs = getPreferences(Context.MODE_PRIVATE);
         final int stateDarkMode = mSharedPrefs.getInt(getString(R.string.state_dark_mode), AppCompatDelegate.MODE_NIGHT_NO);

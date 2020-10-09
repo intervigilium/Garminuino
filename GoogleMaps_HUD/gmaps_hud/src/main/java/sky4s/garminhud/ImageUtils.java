@@ -70,13 +70,11 @@ public class ImageUtils {
         return bitmap;
     }
 
-    public static Context context;
-
-    public static boolean storeBitmap(Bitmap image, String filename) {
-        return storeBitmap(image, null, filename);
+    public static void storeBitmap(Bitmap image, String filename) {
+        storeBitmap(image, null, filename);
     }
 
-    public static boolean storeBitmapQ(Bitmap bmp, String filename) {
+    public static boolean storeBitmapQ(Context context, Bitmap bmp, String filename) {
         File cacheFile = new File(context.getCacheDir(), filename);
         FileOutputStream out = null;
         try {
