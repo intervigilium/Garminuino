@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     SwitchCompat mDarkModeManualSwitch;
 
     static Intent sMainIntent;
-    static NotificationCollectorMonitorService sNCMS;
+    private NotificationCollectorMonitorService mNcms;
 
     public HUDInterface mHud = new DummyHUD();
     public boolean mIsNavigating = false;
@@ -219,6 +219,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    //===============================================================================================
+
+    private ServiceConnection mNcmsConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            NotificationCollectorMonitorService.NotificationCollectorMonitorServiceBinder ncmsBinder =
+                    (NotificationCollectorMonitorService.NotificationCollectorMonitorServiceBinder) binder;
+            mNcms = ncmsBinder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mNcms = null;
+        }
+    };
+
+    //===============================================================================================
 
     void loadOptions() {
         mShowSpeedSwitch.setOnCheckedChangeListener(mOnCheckedChangedListener);
@@ -409,6 +427,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startService(new Intent(this, NotificationCollectorMonitorService.class));
         }
+
+        Intent ncmsIntent = new Intent(getApplicationContext(), NotificationCollectorMonitorService.class);
+        bindService(ncmsIntent, mNcmsConnection, Context.BIND_AUTO_CREATE);
 
         //========================================================================================
         // HUD connection
@@ -1033,9 +1054,9 @@ public class MainActivity extends AppCompatActivity {
             if (has_arrow_bitmap) {
                 if (null != mArrowDebugSwitch && mArrowDebugSwitch.isChecked()) {
                     Parcelable p = intent.getParcelableExtra(getString(R.string.arrow_bitmap));
-                    if (null != sNCMS && p instanceof android.graphics.Bitmap) {
+                    if (null != mNcms && p instanceof android.graphics.Bitmap) {
                         String notify_msg = intent.getStringExtra(getString(R.string.gmaps_notify_msg));
-                        sNCMS.startNotification(notify_msg, (android.graphics.Bitmap) p);
+                        mNcms.startNotification(notify_msg, (android.graphics.Bitmap) p);
                     }
                 }
                 return;

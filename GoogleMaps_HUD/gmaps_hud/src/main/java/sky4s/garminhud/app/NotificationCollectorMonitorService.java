@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
@@ -31,12 +32,20 @@ import androidx.core.app.NotificationCompat;
  */
 public class NotificationCollectorMonitorService extends Service {
 
+    public class NotificationCollectorMonitorServiceBinder extends Binder {
+        public NotificationCollectorMonitorService getService() {
+            return NotificationCollectorMonitorService.this;
+        }
+    }
+
     /**
      * {@link Log#isLoggable(String, int)}
      * <p>
      * IllegalArgumentException is thrown if the tag.length() > 23.
      */
     private static final String TAG = "NCMS";
+
+    private final NotificationCollectorMonitorServiceBinder mBinder = new NotificationCollectorMonitorServiceBinder();
 
     @Override
     public void onCreate() {
@@ -58,7 +67,6 @@ public class NotificationCollectorMonitorService extends Service {
 
     private Notification getNormalNotification(String contentText, Bitmap icon) {
         final Intent mainIntent = MainActivity.sMainIntent;
-        MainActivity.sNCMS = this;
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
         // ONE_SHOT：PendingIntent只使用一次；
         // CANCEL_CURRENT：PendingIntent執行前會先結束掉之前的；
@@ -186,6 +194,6 @@ public class NotificationCollectorMonitorService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 }
