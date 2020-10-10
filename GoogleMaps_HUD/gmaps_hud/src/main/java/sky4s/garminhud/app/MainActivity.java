@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
     SwitchCompat mDarkModeAutoSwitch;
     SwitchCompat mDarkModeManualSwitch;
 
-    static Intent sMainIntent;
     private NotificationCollectorMonitorService mNcms;
 
     public HUDInterface mHud = new DummyHUD();
@@ -421,7 +420,6 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
         //========================================================================================
-        sMainIntent = this.getIntent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(new Intent(this, NotificationCollectorMonitorService.class));
         } else {

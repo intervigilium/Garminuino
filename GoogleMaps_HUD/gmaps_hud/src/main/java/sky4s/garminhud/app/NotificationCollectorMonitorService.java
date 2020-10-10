@@ -66,7 +66,7 @@ public class NotificationCollectorMonitorService extends Service {
     private Notification mNotification;
 
     private Notification getNormalNotification(String contentText, Bitmap icon) {
-        final Intent mainIntent = MainActivity.sMainIntent;
+        final Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
         // ONE_SHOT：PendingIntent只使用一次；
         // CANCEL_CURRENT：PendingIntent執行前會先結束掉之前的；
